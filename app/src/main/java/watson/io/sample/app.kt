@@ -9,7 +9,7 @@ object KeyStore {
     appKey = key
   }
 
-  fun getKey() = appKey
+  fun getKey() = appKey!!
 }
 
 class App : Application() {

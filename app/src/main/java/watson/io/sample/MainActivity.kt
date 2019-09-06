@@ -41,7 +41,7 @@ class MainActivity : AppCompatActivity() {
 
 
 class MainUsecase {
-  suspend fun exe() = RetrofitClient.service.discover(KeyStore.getKey())
+  suspend fun exe() = RetrofitClient.service.discover()
 }
 
 class TestViewModel : ViewModel() {

@@ -6,6 +6,7 @@ import retrofit2.http.GET
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.http.Query
+import watson.io.sample.KeyStore
 
 
 data class NetResult<T>(
@@ -39,7 +40,7 @@ abstract class BaseRetrofitClient {
 interface RemoteServer {
 
   @GET("/3/discover/movie?sort_by=popularity.desc")
-  suspend fun discover(@Query("api_key") key: String?): NetResult<Movie>
+  suspend fun discover(@Query("api_key") key: String = KeyStore.getKey()): NetResult<Movie>
 }
 
 object RetrofitClient : BaseRetrofitClient() {
