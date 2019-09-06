@@ -32,5 +32,7 @@ class MainActivity : AppCompatActivity() {
             }.checkAllMatched
             finish()
         })
+
+        getString(R.string.service_key)
     }
 }
