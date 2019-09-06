@@ -19,6 +19,7 @@ package watson.io.sample.helper
 import android.content.Context
 import android.os.Bundle
 import android.os.Parcel
+import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -41,13 +42,13 @@ import watson.io.sample.BuildConfig
  * executing on and are not worried about synchronization.
  */
 fun <T> lazyFast(operation: () -> T): Lazy<T> = lazy(LazyThreadSafetyMode.NONE) {
-    operation()
+  operation()
 }
 
 /** Convenience for callbacks/listeners whose return value indicates an event was consumed. */
 inline fun consume(f: () -> Unit): Boolean {
-    f()
-    return true
+  f()
+  return true
 }
 
 /**
@@ -56,7 +57,7 @@ inline fun consume(f: () -> Unit): Boolean {
  * `viewGroup.inflate(R.layout.foo)`
  */
 fun ViewGroup.inflate(@LayoutRes layout: Int, attachToRoot: Boolean = false): View {
-    return LayoutInflater.from(context).inflate(layout, this, attachToRoot)
+  return LayoutInflater.from(context).inflate(layout, this, attachToRoot)
 }
 
 /**
@@ -65,7 +66,7 @@ fun ViewGroup.inflate(@LayoutRes layout: Int, attachToRoot: Boolean = false): Vi
  * `supportFragmentManager.inTransaction { add(...) }`
  */
 inline fun FragmentManager.inTransaction(func: FragmentTransaction.() -> FragmentTransaction) {
-    beginTransaction().func().commit()
+  beginTransaction().func().commit()
 }
 
 // region ViewModels
@@ -77,7 +78,11 @@ inline fun FragmentManager.inTransaction(func: FragmentTransaction.() -> Fragmen
  * ```
  */
 inline fun <reified VM : ViewModel> FragmentActivity.viewModelProvider(provider: ViewModelProvider.Factory) =
-    ViewModelProviders.of(this, provider).get(VM::class.java)
+  ViewModelProviders.of(this, provider).get(VM::class.java)
+
+inline fun <reified VM : ViewModel> FragmentActivity.viewModelProvider() =
+  ViewModelProviders.of(this).get(VM::class.java)
+
 
 /**
  * For Fragments, allows declarations like
@@ -86,26 +91,26 @@ inline fun <reified VM : ViewModel> FragmentActivity.viewModelProvider(provider:
  * ```
  */
 inline fun <reified VM : ViewModel> Fragment.viewModelProvider(
-    provider: ViewModelProvider.Factory
+  provider: ViewModelProvider.Factory
 ) =
-    ViewModelProviders.of(this, provider).get(VM::class.java)
+  ViewModelProviders.of(this, provider).get(VM::class.java)
 
 /**
  * Like [Fragment.viewModelProvider] for Fragments that want a [ViewModel] scoped to the Activity.
  */
 inline fun <reified VM : ViewModel> Fragment.activityViewModelProvider(
-    provider: ViewModelProvider.Factory
+  provider: ViewModelProvider.Factory
 ) =
-    ViewModelProviders.of(requireActivity(), provider).get(VM::class.java)
+  ViewModelProviders.of(requireActivity(), provider).get(VM::class.java)
 
 /**
  * Like [Fragment.viewModelProvider] for Fragments that want a [ViewModel] scoped to the parent
  * Fragment.
  */
 inline fun <reified VM : ViewModel> Fragment.parentViewModelProvider(
-    provider: ViewModelProvider.Factory
+  provider: ViewModelProvider.Factory
 ) =
-    ViewModelProviders.of(parentFragment!!, provider).get(VM::class.java)
+  ViewModelProviders.of(parentFragment!!, provider).get(VM::class.java)
 
 // endregion
 // region Parcelables, Bundles
@@ -133,20 +138,20 @@ fun Parcel.readBoolean() = readInt() != 0
 
 /** Uses `Transformations.map` on a LiveData */
 fun <X, Y> LiveData<X>.map(body: (X) -> Y): LiveData<Y> {
-    return Transformations.map(this, body)
+  return Transformations.map(this, body)
 }
 
 /** Uses `Transformations.switchMap` on a LiveData */
 fun <X, Y> LiveData<X>.switchMap(body: (X) -> LiveData<Y>): LiveData<Y> {
-    return Transformations.switchMap(this, body)
+  return Transformations.switchMap(this, body)
 }
 
 fun <T> MutableLiveData<T>.setValueIfNew(newValue: T) {
-    if (this.value != newValue) value = newValue
+  if (this.value != newValue) value = newValue
 }
 
 fun <T> MutableLiveData<T>.postValueIfNew(newValue: T) {
-    if (this.value != newValue) postValue(newValue)
+  if (this.value != newValue) postValue(newValue)
 }
 // endregion
 
@@ -171,7 +176,7 @@ fun ZonedDateTime.toEpochMilli() = this.toInstant().toEpochMilli()
  * }.checkAllMatched
  */
 val <T> T.checkAllMatched: T
-    get() = this
+  get() = this
 
 // region UI utils
 
@@ -181,15 +186,15 @@ val <T> T.checkAllMatched: T
  */
 @ColorInt
 fun Context.getThemeColor(
-    @AttrRes attrResId: Int,
-    @ColorRes fallbackColorResId: Int
+  @AttrRes attrResId: Int,
+  @ColorRes fallbackColorResId: Int
 ): Int {
-    val tv = TypedValue()
-    return if (theme.resolveAttribute(attrResId, tv, true)) {
-        tv.data
-    } else {
-        ContextCompat.getColor(this, fallbackColorResId)
-    }
+  val tv = TypedValue()
+  return if (theme.resolveAttribute(attrResId, tv, true)) {
+    tv.data
+  } else {
+    ContextCompat.getColor(this, fallbackColorResId)
+  }
 }
 
 // endregion
@@ -198,9 +203,11 @@ fun Context.getThemeColor(
  * Helper to throw exceptions only in Debug builds, logging a warning otherwise.
  */
 fun exceptionInDebug(t: Throwable) {
-    if (BuildConfig.DEBUG) {
-        throw t
-    } else {
-        //Timber.e(t)
-    }
+  if (BuildConfig.DEBUG) {
+    throw t
+  } else {
+    //Timber.e(t)
+  }
 }
+
+fun String.log() = Log.i("temp", this)
