@@ -3,13 +3,14 @@ package watson.io.sample
 import android.app.Application
 
 object KeyStore {
-  private var appKey: String? = null
+
+  lateinit var appKey: String
 
   fun initKey(key: String) {
     appKey = key
   }
 
-  fun getKey() = appKey!!
+  fun getKey(): String = appKey
 }
 
 class App : Application() {
