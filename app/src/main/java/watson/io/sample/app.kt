@@ -11,6 +11,8 @@ object KeyStore {
   }
 
   fun getKey(): String = appKey
+
+  val language = "zh-CN"
 }
 
 class App : Application() {

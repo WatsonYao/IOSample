@@ -5,7 +5,7 @@ apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion 29
-    buildToolsVersion "29.0.0"
+    buildToolsVersion '29.0.0'
     defaultConfig {
         applicationId "watson.io.sample"
         minSdkVersion 24
@@ -35,10 +35,16 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     androidTestImplementation "androidx.test:rules:1.2.0"
 
+    implementation("com.squareup.okhttp3:okhttp:3.12.0")
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.1'
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-rx2:1.3.1"
+
     implementation 'com.squareup.retrofit2:retrofit:2.6.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.6.0'
-    implementation 'com.squareup.okhttp3:logging-interceptor:3.10.0'
-    implementation("com.squareup.okhttp3:okhttp:4.1.1")
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.11.0'
+
+    implementation "io.reactivex.rxjava2:rxjava:2.2.12"
+    implementation "io.reactivex.rxjava2:rxandroid:2.1.1"
 
     // UI
     implementation "androidx.browser:browser:1.2.0-alpha07"
@@ -61,6 +67,7 @@ dependencies {
     // Glide
     implementation "com.github.bumptech.glide:glide:4.9.0"
     annotationProcessor "com.github.bumptech.glide:compiler:4.9.0"
+    implementation "com.github.bumptech.glide:okhttp3-integration:4.9.0"
 
     // Utils
     // Date and time API for Java.
