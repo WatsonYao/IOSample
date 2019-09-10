@@ -1,8 +1,10 @@
 package watson.io.sample.ui
 
+import android.text.TextUtils
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import watson.io.sample.helper.log
 import watson.io.sample.helper.map
 import watson.io.sample.model.MovieDetailModel
 import watson.io.sample.model.MovieModel
@@ -31,7 +33,17 @@ class LaunchViewModel(onboardingCompletedUseCase: OnboardingCompletedUseCase) : 
 }
 
 open class BaseVM : BaseViewModel() {
+  protected var init: Boolean = false
 
+  inline fun doWithForceState(force: Boolean, exe: () -> Unit) {
+    if (init) {
+      if (!force) {
+        return
+      }
+    }
+    init = true
+    exe()
+  }
 }
 
 class DiscoverVM : BaseVM() {
@@ -40,15 +52,18 @@ class DiscoverVM : BaseVM() {
   val movies: StateLiveData<List<MovieModel>>
     get() = _movies
 
-  fun fetchDiscover() {
-    load {
-      MovieUsecase().exe()
-    }.result({
-      _movies.postSuccess(it)
-    }, {
-      it.printStackTrace()
-      _movies.postError(it)
-    })
+  fun fetchDiscover(force: Boolean = false) {
+    doWithForceState(force) {
+      "discover".log()
+      load {
+        MovieUsecase().exe()
+      }.result({
+        _movies.postSuccess(it)
+      }, {
+        it.printStackTrace()
+        _movies.postError(it)
+      })
+    }
   }
 }
 
@@ -58,15 +73,18 @@ class MovieDetailVM : BaseVM() {
   val data: StateLiveData<MovieDetailModel>
     get() = _data
 
-  fun fetchMovieDetail(id: String) {
-    load {
-      MovieDetailUsecase().exe(id)
-    }.result({
-      _data.postSuccess(it)
-    }, {
-      it.printStackTrace()
-      _data.postError(it)
-    })
+  fun fetchMovieDetail(id: String, force: Boolean = false) {
+    if (TextUtils.isEmpty(id)) return
+    doWithForceState(force) {
+      load {
+        MovieDetailUsecase().exe(id)
+      }.result({
+        _data.postSuccess(it)
+      }, {
+        it.printStackTrace()
+        _data.postError(it)
+      })
+    }
   }
 }
 

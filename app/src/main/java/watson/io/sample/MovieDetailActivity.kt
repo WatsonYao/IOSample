@@ -19,10 +19,12 @@ class MovieDetailActivity : BaseActivity<MovieDetailVM>() {
 
   override fun enableLoading(): Boolean = true
 
+
+  var id: String = ""
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
 
-    val id = intent.getStringExtra("id")
+    id = intent.getStringExtra("id") ?: ""
     "id -> $id".log()
 
     initView()
@@ -40,7 +42,11 @@ class MovieDetailActivity : BaseActivity<MovieDetailVM>() {
         }
       }
     })
-    id?.let {
+  }
+
+  override fun onResume() {
+    super.onResume()
+    id.let {
       viewModel.fetchMovieDetail(id)
     }
   }

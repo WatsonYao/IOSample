@@ -75,6 +75,10 @@ class MainActivity : BaseActivity<DiscoverVM>() {
         }
       }
     })
+  }
+
+  override fun onResume() {
+    super.onResume()
     viewModel.fetchDiscover()
   }
 
